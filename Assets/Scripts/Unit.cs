@@ -23,11 +23,13 @@ public class Unit : MonoBehaviour
 
     public virtual void ReceiveDamage(int damage)
     {
-        hp -= damage;
-        Debug.Log(hp);
+        if (hp > 0)
+        {
+            hp -= damage;
+        }
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
         Destroy(gameObject);
     }

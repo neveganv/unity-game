@@ -1,34 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class MainCharacter : Unit
 {
-    public MainCharacter() : base(5.0f, 15.0f)
-    {
-    }
-
     private bool isGrounded = false;
+    private bool isDead = false;
 
-    // Start is called before the first frame update
-    void Start()
+    public MainCharacter() : base(5.0f, 15.0f)
+    {}
+
+    private CharacterState State
     {
-        
+        get { return (CharacterState)animator.GetInteger("State"); }
+        set { animator.SetInteger("State", (int)value); }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //changeGrounded();
-        if (Input.GetButton("Horizontal")) Run();
-        if (isGrounded && Input.GetButtonDown("Jump")) Jump();
-
-        if (hp < 1) Die();
-    }
-
-    private void FixedUpdate()
-    {
         changeGrounded();
+        Debug.Log(hp);
+        if (isGrounded && !isDead)
+            State = CharacterState.Idle;
+
+        if (!isDead)
+        {
+            if (Input.GetButton("Horizontal"))
+                Run();
+            if (isGrounded && Input.GetButtonDown("Jump"))
+                Jump();
+            if (hp <= 0)
+                Die();
+        }
     }
 
     void Run()
@@ -37,6 +41,8 @@ public class MainCharacter : Unit
 
         transform.position = Vector3.MoveTowards(transform.position, transform.position + direction, speed * Time.deltaTime);
         sprite.flipX = direction.x < 0.0f;
+
+        State = CharacterState.Run;
     }
 
     void Jump()
@@ -45,10 +51,26 @@ public class MainCharacter : Unit
     }
 
     private void changeGrounded()
-    {
+    {       
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
 
         isGrounded = colliders.Length > 1;
     }
 
+    protected override void Die()
+    {
+        isDead = true;
+        Debug.Log("Died");
+        State = CharacterState.Death;
+
+        Destroy(gameObject, 2);
+    }
+
+}
+
+public enum CharacterState // стани персонажа
+{
+    Idle,
+    Run,
+    Death
 }
