@@ -19,8 +19,8 @@ public class MainCharacter : Unit
 
     void Update()
     {
-        changeGrounded();
-        Debug.Log(hp);
+        ChangeGrounded();
+        Debug.Log(State);
         if (isGrounded && !isDead)
             State = CharacterState.Idle;
 
@@ -50,11 +50,21 @@ public class MainCharacter : Unit
         rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
-    private void changeGrounded()
+    private void ChangeGrounded()
     {       
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
 
         isGrounded = colliders.Length > 1;
+    }
+    public override void ReceiveDamage(int damage)
+    {
+        if (hp > 0)
+        {
+            hp -= damage;
+            State = CharacterState.Hurt;
+            animator.Play("Base Layer.hurt");
+        }
+        
     }
 
     protected override void Die()
@@ -72,5 +82,6 @@ public enum CharacterState // стани персонажа
 {
     Idle,
     Run,
-    Death
+    Death,
+    Hurt
 }
