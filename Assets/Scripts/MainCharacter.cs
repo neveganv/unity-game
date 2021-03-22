@@ -11,6 +11,12 @@ public class MainCharacter : Unit
     public MainCharacter() : base(5.0f, 15.0f)
     {}
 
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.CompareTag("Coin")){
+            Destroy(other.gameObject);
+        }
+    }
+
     private CharacterState State
     {
         get { return (CharacterState)animator.GetInteger("State"); }
