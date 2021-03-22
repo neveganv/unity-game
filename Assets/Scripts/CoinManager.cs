@@ -9,6 +9,7 @@ public class CoinManager : MonoBehaviour
     int score;
     void Start()
     {
+        TextMeshPro text = gameObject.GetComponent<TextMeshPro>();
         if (instance == null)
         {
             instance = this;
@@ -18,6 +19,6 @@ public class CoinManager : MonoBehaviour
     public void ChangeScore(int coinValue)
     {
         score += coinValue;
-        text.text = "Hello";
+        text.text = score.ToString();
     }
 }
