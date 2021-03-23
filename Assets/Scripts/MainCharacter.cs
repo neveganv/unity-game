@@ -7,6 +7,7 @@ public class MainCharacter : Unit
 {
     private bool isGrounded = false;
     private bool isDead = false;
+    private bool facingRight = true;
 
     public MainCharacter() : base(5.0f, 15.0f)
     {}
@@ -26,12 +27,11 @@ public class MainCharacter : Unit
     void Update()
     {
         ChangeGrounded();
-        Debug.Log(State);
-        if (isGrounded && !isDead)
-            State = CharacterState.Idle;
 
         if (!isDead)
         {
+            State = CharacterState.Idle;
+
             if (Input.GetButton("Horizontal"))
                 Run();
             if (isGrounded && Input.GetButtonDown("Jump"))
@@ -43,12 +43,21 @@ public class MainCharacter : Unit
 
     void Run()
     {
-        Vector3 direction = transform.right * Input.GetAxis("Horizontal");
-
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + direction, speed * Time.deltaTime);
-        sprite.flipX = direction.x < 0.0f;
-
         State = CharacterState.Run;
+
+        Vector3 direction = transform.right * Input.GetAxis("Horizontal");
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + direction, speed * Time.deltaTime);
+
+        //flip character
+        if (Input.GetAxis("Horizontal") < 0.0f && facingRight || Input.GetAxis("Horizontal") > 0.0f && !facingRight)
+        {
+            facingRight = !facingRight;
+
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;
+        }
+
     }
 
     void Jump()
@@ -62,6 +71,7 @@ public class MainCharacter : Unit
 
         isGrounded = colliders.Length > 1;
     }
+
     public override void ReceiveDamage(int damage)
     {
         if (hp > 0)
@@ -70,7 +80,6 @@ public class MainCharacter : Unit
             State = CharacterState.Hurt;
             animator.Play("Base Layer.hurt");
         }
-        
     }
 
     protected override void Die()

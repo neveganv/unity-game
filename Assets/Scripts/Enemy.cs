@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
+    [SerializeField]
     protected int damage;
 
     public Enemy(int damage, float speed, float jumpForce) : base(speed, jumpForce)
@@ -12,11 +13,11 @@ public class Enemy : Unit
     }
     protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
-        MainCharacter character = collider.GetComponent<MainCharacter>();
-
-        if (character)
+        if (collider.gameObject.CompareTag("Player"))
         {
+            MainCharacter character = collider.GetComponent<MainCharacter>();
             character.ReceiveDamage(damage);
         }
+ 
     }
 }

@@ -6,10 +6,12 @@ public class CoinManager : MonoBehaviour
 {
     public static CoinManager instance;
     public TextMeshProUGUI text;
+    public GameObject coin;
     int score;
     void Start()
     {
-        TextMeshPro text = gameObject.GetComponent<TextMeshPro>();
+        coin = GameObject.Find("HealthBar");
+        text = coin.GetComponentInChildren<TextMeshProUGUI>();
         if (instance == null)
         {
             instance = this;
@@ -19,6 +21,6 @@ public class CoinManager : MonoBehaviour
     public void ChangeScore(int coinValue)
     {
         score += coinValue;
-        text.text = score.ToString();
+        text.text = "x" + score.ToString();
     }
 }
