@@ -16,7 +16,13 @@ public class MainCharacter : Unit
         if(other.gameObject.CompareTag("Coin")){
             Destroy(other.gameObject);
         }
+
+        else if(other.gameObject.CompareTag("Health")){
+            Destroy(other.gameObject);
+        }
     }
+
+
 
     private CharacterState State
     {
@@ -82,6 +88,14 @@ public class MainCharacter : Unit
         }
     }
 
+    public void ReceiveHeal(int heal)
+    {
+        if (hp < 100)
+        {
+            hp += heal;
+        }
+    }
+
     protected override void Die()
     {
         isDead = true;
@@ -98,5 +112,5 @@ public enum CharacterState // стани персонажа
     Idle,
     Run,
     Death,
-    Hurt
+    Hurt,
 }

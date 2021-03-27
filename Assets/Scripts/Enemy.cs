@@ -18,6 +18,5 @@ public class Enemy : Unit
             MainCharacter character = collider.GetComponent<MainCharacter>();
             character.ReceiveDamage(damage);
         }
- 
     }
 }

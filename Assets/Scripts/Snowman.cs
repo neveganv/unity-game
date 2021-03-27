@@ -9,7 +9,6 @@ public class Snowman : Enemy
     Snowman() : base(25, 3.0f, 10.0f)
     { }
 
-
     protected void Awake()
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
