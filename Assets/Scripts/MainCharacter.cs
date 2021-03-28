@@ -9,19 +9,35 @@ public class MainCharacter : Unit
     private bool isDead = false;
     private bool facingRight = true;
 
+    private Bullet bullet;
+
     public MainCharacter() : base(5.0f, 15.0f)
     {}
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.CompareTag("Coin")){
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
             Destroy(other.gameObject);
         }
 
-        else if(other.gameObject.CompareTag("Health")){
+        else if (other.gameObject.CompareTag("Health"))
+        {
             Destroy(other.gameObject);
         }
     }
 
+
+    private void Start()
+    {
+        /*rigidBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        sprite = GetComponentInChildren<SpriteRenderer>();*/
+
+        bullet = Resources.Load<Bullet>("Bullet");
+
+        Debug.Log(bullet);
+    }
 
 
     private CharacterState State
@@ -44,6 +60,9 @@ public class MainCharacter : Unit
                 Jump();
             if (hp <= 0)
                 Die();
+
+            if (Input.GetButton("Fire1"))
+                Shoot();
         }
     }
 
@@ -69,6 +88,14 @@ public class MainCharacter : Unit
     void Jump()
     {
         rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    private void Shoot()
+    {
+        Vector3 position = transform.position;
+        Debug.Log(bullet);
+        //position.y += 1.0F;
+        Instantiate(bullet, position, bullet.transform.rotation);
     }
 
     private void ChangeGrounded()
