@@ -23,5 +23,10 @@ public class HealthBar : MonoBehaviour
             fill.fillAmount = i;
             await Task.Delay(10);
         }
+        for (float i = previousFill; i < (float)mainCharacter.hp / 100; i += 0.01f)
+        {
+            fill.fillAmount = i;
+            await Task.Delay(10);
+        }
     }
 }
